@@ -9,9 +9,14 @@ dotenv.config();
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const MODEL = "openai/gpt-4o-mini";
 
-if (!OPENROUTER_API_KEY) {
-  throw new Error(" OPENROUTER_API_KEY is missing in .env");
-}
+const getApiKey = () => {
+  const key = process.env.OPENROUTER_API_KEY || OPENROUTER_API_KEY;
+  if (!key) {
+    console.error("❌ ERROR: OPENROUTER_API_KEY is missing from environment variables!");
+    throw new Error("OPENROUTER_API_KEY is missing from environment variables.");
+  }
+  return key;
+};
 
 // --------------------------------------------------
 //  Helper: Clean & Parse JSON safely
@@ -51,7 +56,7 @@ Rules:
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+      Authorization: `Bearer ${getApiKey()}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -99,7 +104,7 @@ ${qaPairs
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+      Authorization: `Bearer ${getApiKey()}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -152,7 +157,7 @@ JSON format:
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      Authorization: `Bearer ${getApiKey()}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
