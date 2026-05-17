@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: skill-mirror-api
+    runtime: node
+    plan: free
+    region: virginia
+    branch: main
+    rootDir: Skill-Mirror/skillmirror-backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+  - type: web
+    name: skill-mirror-web
+    runtime: static
+    branch: main
+    rootDir: Skill-Mirror
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
